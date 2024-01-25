@@ -61,7 +61,6 @@ public class UserService implements IUserService {
         return userRepository.findByFullNameContaining(name, pageable);
     }
 
-
     @Override
     public void editUserRole(Map<String, Object> map, Long userId) throws Exception {
         try {
@@ -119,19 +118,19 @@ public class UserService implements IUserService {
         UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetail.getUsername();
         User user = userRepository.findByUsername(username).orElseThrow(() -> new NoSuchElementException("Không tồn tại người dùng"));
-        if (existsByEmail(c.getEmail())) {
-            throw new EmailExistException("Email đã tồn tại ");
-        }
-        if (existsByPhone(c.getPhone())) {
-            throw new PhoneExistException("Số điện thoại đã tồn tãi");
-        }
+//        if (existsByEmail(c.getEmail()) && !c.getEmail().equals(user.getEmail())) {
+//            throw new EmailExistException("Email đã tồn tại ");
+//        }
+//        if (existsByPhone(c.getPhone()) && !c.getPhone().equals(user.getPhone())) {
+//            throw new PhoneExistException("Số điện thoại đã tồn tãi");
+//        }
         if (user.getUsername().equals(username)) {
             user.setUpdated_at(new Date(System.currentTimeMillis()));
-            user.setAvatar(uploadService.uploadFileToServer(c.getAvatar()));
-            user.setAddress(c.getAddress());
-            user.setFullName(c.getFullname());
-            user.setEmail(c.getEmail());
-            user.setPhone(c.getPhone());
+            user.setAvatar(c.getAvatar() == null ? user.getAvatar() : uploadService.uploadFileToServer(c.getAvatar()));
+            user.setAddress(c.getAddress() == null ? user.getAddress() : c.getAddress());
+            user.setFullName(c.getFullname() == null ? user.getFullName() : c.getFullname());
+            user.setEmail(c.getEmail() == null ? user.getEmail() : c.getEmail());
+            user.setPhone(c.getPhone() == null ? user.getPhone() : c.getPhone());
         }
         return userRepository.save(user);
     }

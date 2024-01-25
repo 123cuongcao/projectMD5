@@ -46,7 +46,7 @@ public class AdminCategoryController {
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<Categories> getCategory(@PathVariable Long categoryId) throws NoSuchElementException {
-        return new ResponseEntity<>(categoryService.findById(categoryId).orElseThrow(() -> new NoSuchElementException("Không có sản phẩm này")), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(categoryService.findById(categoryId).orElseThrow(() -> new NoSuchElementException("Không có tồn tại danh mục này")), HttpStatus.BAD_REQUEST);
     }
 
 

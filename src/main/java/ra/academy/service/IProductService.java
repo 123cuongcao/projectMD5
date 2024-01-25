@@ -8,6 +8,7 @@ import ra.academy.model.dto.response.ProductResponse;
 import ra.academy.model.entity.Products;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public interface IProductService {
@@ -18,6 +19,6 @@ public interface IProductService {
     Optional<Products> findById(Long id);
 //    Page<Products> findAllByNameContaining(Pageable pageable,String name);
     Page<ProductResponse> findAllByUser(Pageable pageable , String name);
-
     Page<ProductResponse> getNewProduct(Pageable pageable);
+    List<ProductResponse> getBestSeller();
 }

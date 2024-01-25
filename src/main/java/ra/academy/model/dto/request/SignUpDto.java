@@ -26,6 +26,7 @@ import java.util.Set;
 public class SignUpDto {
     @UserNameUnique
     @NotBlank(message = "Không được để trống")
+    @Pattern(regexp = "^[^\\p{M}]+(\\S+)?$", message = "Chuỗi không được chứa dấu và khoảng trắng")
     @Size(min = 5, max = 10, message = "Độ dài từ 5 đến 10 ký tự")
     private String username;
 
@@ -39,12 +40,12 @@ public class SignUpDto {
 
     @EmailUnique
     @NotBlank(message = "Không được để trống")
-    @Pattern(regexp = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",message = "Email không đúng định dạng(a@gmail.com)")
+    @Pattern(regexp = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message = "Email không đúng định dạng(a@gmail.com)")
     private String email;
 
     @PhoneUnique
     @NotBlank(message = "Không được để trống")
-    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Số điện thoại không đúng định dạng")
+    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b", message = "Số điện thoại không đúng định dạng")
     private String phone;
 
     private MultipartFile avatar;

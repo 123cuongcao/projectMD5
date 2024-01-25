@@ -34,6 +34,10 @@ public class Products {
     private Date created_at;
 
     private Date updated_at;
-
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private ProductStatus status;
+//    @OneToMany(mappedBy = "product")
+//    private List<OrderDetails> orderDetails;
 
 }

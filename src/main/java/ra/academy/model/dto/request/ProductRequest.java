@@ -14,13 +14,14 @@ import ra.academy.model.entity.Categories;
 @Setter
 public class ProductRequest {
     private Long id;
-    @NotBlank
     private String sku;
     @NotBlank
     private String name;
+
     private String description;
     private Double unit_price;
     private int stock_quantity;
     private MultipartFile image;
     private Long categoryId;
+    private String status;
 }

@@ -44,8 +44,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Orders> orders;
 
-    @OneToMany(mappedBy = "user")
-    private List<WishList> wishList;
+//    @OneToMany(mappedBy = "user")
+//    private List<WishList> wishList;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(

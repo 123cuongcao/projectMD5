@@ -1,5 +1,6 @@
 package ra.academy.controller;
 
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class UserAccountController {
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUserAccount(@ModelAttribute UpdateAccountRequest updateAccountRequest) throws UnauthorizedException, EmailExistException, PhoneExistException {
+    public ResponseEntity<User> updateUserAccount(@ModelAttribute @Valid UpdateAccountRequest updateAccountRequest) throws UnauthorizedException, EmailExistException, PhoneExistException {
         return new ResponseEntity<>(service.updateAccount(updateAccountRequest), HttpStatus.OK);
     }
 

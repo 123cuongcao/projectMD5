@@ -28,8 +28,10 @@ public class ShoppingCartService implements IShoppingCartService {
 
     @Override
     public List<ShoppingCartResponse> getAllShoppingCart() {
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(userDetail.getUsername()).orElseThrow(() -> new NoSuchElementException("Người dùng không tồn tại"));
 
-        return repository.findAll().stream().map(a -> ShoppingCartResponse.builder()
+        return repository.findByUser(user).stream().map(a -> ShoppingCartResponse.builder()
                 .id(a.getId())
                 .productName(a.getProduct().getName())
                 .unitPrice(a.getProduct().getUnit_price())
@@ -38,7 +40,7 @@ public class ShoppingCartService implements IShoppingCartService {
     }
 
     @Override
-    public ShoppingCartResponse addShoppingCart(Map<String, Integer> map) throws UnauthorizedException {
+    public ShoppingCartResponse addShoppingCart(Map<String, Integer> map) {
         UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByUsername(userDetail.getUsername()).orElseThrow(() -> new NoSuchElementException("Người dùng không tồn tại"));
 
@@ -111,9 +113,26 @@ public class ShoppingCartService implements IShoppingCartService {
         o.setReceive_phone(address.getPhone());
         o.setTotal_price(total);
         o.setReceived_at(new Date(System.currentTimeMillis() + 86400000));
+        o.setOrderDetails(new ArrayList<>());
+        Orders orders = orderRepository.save(o);
+        orders.setOrderDetails(change(orders));
         deleteAllShoppingCart();
-        return orderRepository.save(o);
+        return orderRepository.save(orders);
+
     }
 
+    public List<OrderDetails> change(Orders orders) {
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByUsername(userDetail.getUsername()).orElseThrow(() -> new NoSuchElementException("Người dùng không tồn tại"));
+
+        return repository.findByUser(user).stream().map(a -> OrderDetails.builder()
+                .id(new OrderDetailId(orders.getId(), a.getProduct().getId()))
+                .name(a.getProduct().getName())
+                .product(a.getProduct())
+                .orders(orders)
+                .unit_price(a.getProduct().getUnit_price())
+                .order_quantity(a.getOrder_quantity())
+                .build()).collect(Collectors.toList());
+    }
 
 }

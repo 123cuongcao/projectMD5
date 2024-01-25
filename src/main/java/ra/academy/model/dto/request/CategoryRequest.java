@@ -25,7 +25,7 @@ public class CategoryRequest {
 
     private String name;
 
-    @Size(max = 100)
+    @Size(max = 200)
     private String description;
 
     private boolean status = true;

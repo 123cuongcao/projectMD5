@@ -37,6 +37,10 @@ public class AddressService implements IAddressService {
                 .phone(addressRequest.getPhone())
                 .receiver_name(addressRequest.getReceiver_name())
                 .me(user)
+                .province(addressRequest.getProvince())
+                .city(addressRequest.getCity())
+                .district(addressRequest.getDistrict())
+                .isDefault(false)
                 .build();
         return repository.save(address);
 

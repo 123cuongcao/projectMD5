@@ -46,10 +46,9 @@ public class AdminProductController {
 
     @GetMapping
     public ResponseEntity<Page<Products>> findAll(Pageable pageable,
-                                              @RequestParam(defaultValue = "") String name) {
+                                                  @RequestParam(defaultValue = "") String name) {
         return new ResponseEntity<>(service.findAll(pageable, name), HttpStatus.OK);
     }
-
 
 
 

@@ -21,7 +21,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         Map<String, String> map = new HashMap<>();
-        map.put("message", "Not Authenticated !");
+        map.put("message", "Chưa được xác thực !");
         response.setStatus(403);
         new ObjectMapper().writeValue(response.getOutputStream(), map);
     }

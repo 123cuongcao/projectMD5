@@ -47,7 +47,7 @@ public class CatalogService implements ICategoryService {
 
     @Override
     public void deleteCategory(Long categories) throws NoSuchElementException {
-        repository.delete(findById(categories).orElseThrow(() -> new NoSuchElementException("Không tồn tại sanh mục này")));
+        repository.delete(findById(categories).orElseThrow(() -> new NoSuchElementException("Không tồn tại danh mục này")));
     }
 
     @Override

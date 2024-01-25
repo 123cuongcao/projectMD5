@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import ra.academy.exception.ProductExist;
 import ra.academy.model.dto.request.ProductRequest;
 import ra.academy.model.dto.response.ProductResponse;
+import ra.academy.model.entity.ProductStatus;
 import ra.academy.model.entity.Products;
+import ra.academy.repository.IOrderDetailRepository;
+import ra.academy.repository.IOrderRepository;
 import ra.academy.repository.IProductRepository;
 import ra.academy.service.ICategoryService;
 import ra.academy.service.IProductService;
@@ -42,6 +45,7 @@ public class ProductService implements IProductService {
                 .stock_quantity(productRequest.getStock_quantity())
                 .created_at(new Date(System.currentTimeMillis()))
                 .updated_at(null)
+                .status(ProductStatus.ACTIVE)
                 .build();
         product.setSku(generateUUID().toString());
         return repository.save(product);
@@ -53,17 +57,17 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Products edit(ProductRequest productRequest) throws NoSuchElementException, ProductExist {
-        Products products = findById(productRequest.getId()).orElseThrow(() -> new NoSuchElementException("sản phẩm không tồn tại"));
+    public Products edit(ProductRequest p) throws NoSuchElementException, ProductExist {
+        Products products = findById(p.getId()).orElseThrow(() -> new NoSuchElementException("sản phẩm không tồn tại"));
         try {
-            products.setName(productRequest.getName());
-            products.setCategories(categoryService.findById(productRequest.getCategoryId()).orElseThrow(() -> new NoSuchElementException("Không tồn tại danh mục")));
-            products.setName(productRequest.getName());
-            products.setDescription(productRequest.getDescription());
-            products.setImage(service.uploadFileToServer(productRequest.getImage()));
-            products.setUnit_price(productRequest.getUnit_price());
-            products.setStock_quantity(productRequest.getStock_quantity());
+            products.setName(p.getName() == null ? products.getName() : p.getName());
+            products.setCategories(p.getCategoryId() == null ? products.getCategories() : categoryService.findById(p.getCategoryId()).orElseThrow(() -> new NoSuchElementException("Không tồn tại danh mục")));
+            products.setDescription(p.getDescription() == null ? products.getDescription() : p.getDescription());
+            products.setImage(p.getImage() == null ? products.getImage() : service.uploadFileToServer(p.getImage()));
+            products.setUnit_price(p.getUnit_price() == null ? products.getUnit_price() : p.getUnit_price());
+            products.setStock_quantity(p.getStock_quantity() == 0 ? products.getStock_quantity() : p.getStock_quantity());
             products.setUpdated_at(new Date(System.currentTimeMillis()));
+            products.setStatus(p.getStatus() == null? products.getStatus() : ProductStatus.valueOf(p.getStatus()));
         } catch (Exception e) {
             throw new ProductExist("Tên sản phẩm đã tồn tại");
         }
@@ -101,9 +105,22 @@ public class ProductService implements IProductService {
         return new PageImpl<>(list, pageable, repository.findNewProduct(pageable).getTotalElements());
     }
 
+    @Override
+    public List<ProductResponse> getBestSeller() {
+        return repository.findBestSellerProduct().stream().map(a ->
+                ProductResponse.builder()
+                        .imageUrl(a.getImage())
+                        .productName(a.getName())
+                        .unitPrice(a.getUnit_price())
+                        .description(a.getDescription())
+                        .id(a.getId())
+                        .build()).collect(Collectors.toList());
+    }
+
     public UUID generateUUID() {
         return UUID.randomUUID();
     }
+
 
 }
 

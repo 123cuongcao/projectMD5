@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
+import ra.academy.validator.EmailUnique;
+import ra.academy.validator.PhoneUnique;
 
 import java.util.Set;
 
@@ -17,17 +19,17 @@ import java.util.Set;
 
 public class UpdateAccountRequest {
 
-
-
     @NotBlank(message = "Không được để trống")
     private String fullname;
 
     @NotBlank(message = "Không được để trống")
+    @EmailUnique
     @Pattern(regexp = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",message = "Email không đúng định dạng(a@gmail.com)")
     private String email;
 
     @NotBlank(message = "Không được để trống")
     @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Số điện thoại không đúng định dạng")
+    @PhoneUnique
     private String phone;
 
     private MultipartFile avatar;

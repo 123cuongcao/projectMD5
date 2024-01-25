@@ -24,7 +24,6 @@ public class Orders {
     private Long id;
     @GeneratedValue(strategy = GenerationType.UUID)
     private String serial_number;
-
     private Double total_price;
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -37,13 +36,11 @@ public class Orders {
     private Date created_at;
     @JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
     private Date received_at;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-
-    @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @JsonIgnore
     List<OrderDetails> orderDetails;
-
 }

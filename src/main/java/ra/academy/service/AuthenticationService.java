@@ -91,7 +91,7 @@ public class AuthenticationService {
                 .shoppingCarts(new ArrayList<>())
                 .status(true)
                 .updated_at(null)
-                .wishList(new ArrayList<>())
+//                .wishList(new ArrayList<>())
                 .orders(new ArrayList<>())
                 .fullName(signUpDto.getFullname())
                 .build();

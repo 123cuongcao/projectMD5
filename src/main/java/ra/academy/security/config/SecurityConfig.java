@@ -55,9 +55,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // ko lưu trạng thái
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api.watcher.com/v1/auth/**").permitAll()
-                                .requestMatchers("/api.watcher.com/v1/admin/**").permitAll()
-                                .requestMatchers("/api.watcher.com/v1/user/**").permitAll()
-                                .requestMatchers("/api.watcher.com/v1/**").permitAll()
+                                .requestMatchers("/api.watcher.com/v1/categories/**").permitAll()
+                                .requestMatchers("/api.watcher.com/v1/products/**").permitAll()
+                                .requestMatchers("/api.watcher.com/v1/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                                .requestMatchers("/api.watcher.com/v1/user/**").hasAnyAuthority("ROLE_USER")
 
                                 // công khai với đường dẫn này
                                 .anyRequest().authenticated() // các đường dẫn khác yêu cầu xác thực

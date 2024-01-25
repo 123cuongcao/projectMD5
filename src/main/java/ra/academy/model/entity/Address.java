@@ -29,4 +29,15 @@ public class Address {
     @Column(length = 50)
     private String receiver_name;
 
+    private String district;
+    private String city;
+    private String province;
+    private boolean isDefault;
+
+    @PrePersist
+    @PreUpdate
+    private void updateFullAddress() {
+        this.full_address = String.format("%s, %s, %s", district, city, province);
+    }
+
 }
